@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loginscreen/screen/login_screen.dart';
+import 'package:loginscreen/screen/signup_screen.dart';
 import 'package:loginscreen/screen/splash_screen.dart';
 import 'package:loginscreen/utils/route.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       home:SplashScreen(),
       routes: {
         Routes.loginScreen:(context) =>LoginScreen(),
-        // Routes.signUp:(context)=>SignUpScreen(),
+        Routes.signUp:(context)=>SignUpScreen(),
       },
     );
   }

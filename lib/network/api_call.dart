@@ -1,30 +1,53 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 
 import 'api.dart';
 
 class ApiCall {
+  static Future<dynamic> request(
+      BuildContext context, dynamic body, String endpoint) async {
+    try {
+      var response =
+          await http.post(Uri.parse(Apis.baseUrl + endpoint), body: body);
 
-  static Future<dynamic> request(BuildContext context,
-      dynamic body, String endpoint)async{
+      print(response);
+      print('${Apis.baseUrl}$endpoint');
+      print(body);
 
-   try{
-     var response = await http.post(Uri.parse(Apis.baseUrl+endpoint),
-     body: body);
-
-     if(response.statusCode == 200){
-       var result = jsonDecode(response.body);
-       print(result['token']);
-     }else{
-       print('Api Error');
-     }
-   }catch(e){
-     print('Error ${e.toString()}');
-   }
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        print(result['token']);
+        return result;
+      } else {
+        print('Api Error');
+      }
+    } catch (e) {
+      print('Error ${e.toString()}');
+    }
   }
 
- static Future<void> makePostRequest(String endPoint) async {
+  static Future<dynamic> requestget(
+      BuildContext context, String endpoint) async {
+    try {
+      var response = await http.get(
+        Uri.parse(Apis.baseUrl + endpoint),
+      );
+      print(response);
+
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        print(result);
+        // print(result['token']);
+      } else {
+        print('Api Error');
+      }
+    } catch (e) {
+      print('Error ${e.toString()}');
+    }
+  }
+
+/*static Future<void> makePostRequest(String endPoint) async {
     final url = Uri.parse('${Apis.baseUrl}$endPoint');
     print('MainUrl....${url}');
     final json = {
@@ -45,5 +68,5 @@ class ApiCall {
     } catch (e) {
       print('Request failed with error: $e.');
     }
-  }
+}*/
 }

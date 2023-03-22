@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loginscreen/network/api.dart';
 import 'package:loginscreen/network/api_call.dart';
-
+import 'package:loginscreen/screen/signup_screen.dart';
+import 'package:loginscreen/utils/massage.dart';
 import '../utils/image_url.dart';
 import 'package:http/http.dart' as http;
+
+import '../utils/route.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,10 +21,14 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
   FocusNode emailFocus = FocusNode();
   FocusNode passwordFocus = FocusNode();
+  bool isValid = Massage.email == true;
+  bool isInvalid = Massage.email != true;
+  String? _username;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.grey,
+    return Scaffold(
+      backgroundColor: Colors.grey,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(
@@ -47,8 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(children: [
-                    TextField(
-                      controller: emailController,
+                    TextFormField(
+                      controller: emailController..text = 'eve.holt@reqres.in',
                       focusNode: emailFocus,
                       autofocus: true,
                       keyboardType: TextInputType.emailAddress,
@@ -63,13 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextField(
-                      controller: passwordController,
+                    TextFormField(
+                      controller: passwordController..text = 'cityslicka',
                       focusNode: passwordFocus,
                       autofocus: false,
                       keyboardType: TextInputType.visiblePassword,
                       decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.remove_red_eye),
+                          suffixIcon: Icon(Icons.remove_red_eye),
                           labelText: 'Password',
                           hintText: 'Password ',
                           border: OutlineInputBorder(
@@ -85,19 +91,34 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15), // <-- Radius
+                              borderRadius:
+                                  BorderRadius.circular(15), // <-- Radius
                             ),
                           ),
-
                           onPressed: () async {
-                            var url = '/api/login';
-                            var body = {
-                              "email": emailController.text,
-                              "password": passwordController.text
-                            };
-                            setState(() {
-                              ApiCall.request(context,body,url);
-                            });
+                            if (emailController.text == '') {
+                              print('Please enter email');
+                            } else if (passwordController.text == '') {
+                              print('Please enter password');
+                            } else if (emailController.text ==
+                                    'eve.holt@reqres.in' ||
+                                passwordController.text == 'cityslicka') {
+                              var url = '/api/login';
+                              var body = {
+                                "email": 'eve.holt@reqres.in',
+                                "password": 'cityslicka',
+                              };
+                              setState(() {
+                                ApiCall.request(context, body, url)
+                                    .then((value) {
+                                        Navigator.pushNamed(context, Routes.signUp);
+                                        print(Routes.signUp);
+                                });
+                              });
+                            } else {
+                              print('Please entr valid email or Password!');
+                            }
+
                             // makePostRequest();
                           },
                           child: const Text(
@@ -116,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
- /* Future<void> makePostRequest() async {
+  /* Future<void> makePostRequest() async {
     final url = Uri.parse('https://reqres.in/api/register');
     final json = {
       'email': 'eve.holt@reqres.in',
@@ -137,5 +158,4 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Request failed with error: $e.');
     }
   }*/
-
 }

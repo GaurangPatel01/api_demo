@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:loginscreen/network/api_call.dart';
-import 'package:loginscreen/screen/signup_screen.dart';
-import 'package:loginscreen/utils/massage.dart';
 import '../utils/image_url.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,10 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
   FocusNode emailFocus = FocusNode();
   FocusNode passwordFocus = FocusNode();
-  bool isValid = Massage.email == true;
-  bool isInvalid = Massage.email != true;
-  String? _username;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               var url = '/api/login';
                               var body = {
                                 "email": 'eve.holt@reqres.in',
-                                "password": 'cityslicka',
+                                "password":'cityslicka',
                               };
                               setState(() {
                                 ApiCall.request(context, body, url)
@@ -116,10 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               });
                             } else {
-                              print('Please entr valid email or Password!');
+                              print('Please enter valid email or Password!');
                             }
-
-                            // makePostRequest();
                           },
                           child: const Text(
                             'LOGIN',
@@ -136,26 +126,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  /* Future<void> makePostRequest() async {
-    final url = Uri.parse('https://reqres.in/api/register');
-    final json = {
-      'email': 'eve.holt@reqres.in',
-      'password': 'pistol'
-    };
-    try {
-      final response = await http.post(url, body:json);
-      if (response.statusCode == 200) {
-        final result = response.body;
-        print('ID: ${jsonDecode(result)}');
-        var res = jsonDecode(result);
-        print('Id.....: ${res['id']}');
-        print('Token: ${result}');
-      } else {
-        print('Request failed with status: ${response.statusCode}.');
-      }
-    } catch (e) {
-      print('Request failed with error: $e.');
-    }
-  }*/
 }

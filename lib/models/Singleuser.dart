@@ -1,47 +1,26 @@
 import 'dart:convert';
-
-Category categoryFromJson(String str) => Category.fromJson(json.decode(str));
-
-String categoryToJson(Category data) => json.encode(data.toJson());
-
-class Category {
-    Category({
-        required this.page,
-        required this.perPage,
-        required this.total,
-        required this.totalPages,
+class Singleuser {
+    Singleuser({
         required this.data,
         required this.support,
     });
 
-    int page;
-    int perPage;
-    int total;
-    int totalPages;
-    List<Datum> data;
+    Data data;
     Support support;
 
-    factory Category.fromJson(Map<String, dynamic> json) => Category(
-        page: json["page"],
-        perPage: json["per_page"],
-        total: json["total"],
-        totalPages: json["total_pages"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    factory Singleuser.fromJson(Map<String, dynamic> json) => Singleuser(
+        data: Data.fromJson(json["data"]),
         support: Support.fromJson(json["support"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "page": page,
-        "per_page": perPage,
-        "total": total,
-        "total_pages": totalPages,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data.toJson(),
         "support": support.toJson(),
     };
 }
 
-class Datum {
-    Datum({
+class Data {
+    Data({
         required this.id,
         required this.email,
         required this.firstName,
@@ -55,7 +34,7 @@ class Datum {
     String lastName;
     String avatar;
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json["id"],
         email: json["email"],
         firstName: json["first_name"],

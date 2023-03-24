@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:loginscreen/network/api_call.dart';
+import 'package:loginscreen/screen/user_screen.dart';
 
-import '../network/api_call.dart';
+import '../models/data.dart';
 import '../utils/route.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -10,37 +13,90 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
+  List<Datum> userList = <Datum>[];
+  var _isLoading = false;
   @override
   void initState() {
-    var url = '/api/users?page=2';
-    dynamic sample = ApiCall.requestget(context,url);
+    getUserList(context);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ListView.builder(
-        itemCount: 1,
-        itemBuilder:(context,index){
-          return Container(
-            height: double.infinity,
-            color: Colors.purple,
-            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-            margin: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('id '),
-                Text('email'),
-                Text('first_name'),
-                Text('last_name'),
-                Text('avatar'),
-              ],
+    // final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    return Scaffold(
+      appBar: AppBar(title: const Text('User List')),
+      body:_isLoading?
+      Center(child: CircularProgressIndicator(),)
+          : ListView.builder(
+        shrinkWrap: true,
+        itemCount: userList.length,
+        itemBuilder: (context,index) {
+          return InkWell(
+            onTap: ()=> setState(() {
+              Navigator.pushNamed(context, Routes.singleuser);
+            }),
+            child: Card(
+              elevation: 10,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(48),
+                        child: Image.network(
+                          userList[index].avatar,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Id : ${userList[index].id}'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text('${userList[index].firstName}'
+                            '${userList[index].lastName}'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(userList[index].email),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         },
-        ),
+      ),
     );
+  }
+
+  void getUserList(BuildContext context) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      var response = await ApiCall.requestGet(context, '/api/users?page=2');
+      print('response :$response');
+      userList.clear();
+      List<Datum> list =
+          response["data"].map<Datum>((json) => Datum.fromJson(json)).toList();
+      userList.addAll(list);
+    } finally{
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

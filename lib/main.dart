@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loginscreen/screen/login_screen.dart';
 import 'package:loginscreen/screen/signup_screen.dart';
 import 'package:loginscreen/screen/splash_screen.dart';
+import 'package:loginscreen/screen/user_screen.dart';
 import 'package:loginscreen/utils/route.dart';
 
 void main() {
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.loginScreen:(context) =>LoginScreen(),
         Routes.signUp:(context)=>SignUpScreen(),
+        Routes.singleuser:(context)=> SingleUserScreen(),
+
       },
     );
   }

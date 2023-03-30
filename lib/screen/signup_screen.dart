@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loginscreen/network/api_call.dart';
 import 'package:loginscreen/screen/user_screen.dart';
 
+
 import '../models/data.dart';
 import '../utils/route.dart';
 
@@ -15,6 +16,8 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   List<Datum> userList = <Datum>[];
   var _isLoading = false;
+
+
   @override
   void initState() {
     getUserList(context);
@@ -23,7 +26,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     return Scaffold(
       appBar: AppBar(title: const Text('User List')),
       body:_isLoading?
@@ -34,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         itemBuilder: (context,index) {
           return InkWell(
             onTap: ()=> setState(() {
-              Navigator.pushNamed(context, Routes.singleuser);
+               Navigator.push(context,MaterialPageRoute(builder: (context) => SingleUserScreen(usersList:userList[index]),));
             }),
             child: Card(
               elevation: 10,
@@ -87,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       setState(() {
         _isLoading = true;
       });
-      var response = await ApiCall.requestGet(context, '/api/users?page=2');
+      var response = await ApiCall.requestGet(context, '/api/users?page=1');
       print('response :$response');
       userList.clear();
       List<Datum> list =

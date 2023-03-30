@@ -12,6 +12,8 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  get userListo => null;
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.loginScreen:(context) =>LoginScreen(),
         Routes.signUp:(context)=>SignUpScreen(),
-        Routes.singleuser:(context)=> SingleUserScreen(),
+        Routes.singleuser:(context)=> SingleUserScreen(usersList:userListo ),
 
       },
     );

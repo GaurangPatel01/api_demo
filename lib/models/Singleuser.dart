@@ -49,6 +49,8 @@ class Data {
         "last_name": lastName,
         "avatar": avatar,
     };
+
+
 }
 
 class Support {

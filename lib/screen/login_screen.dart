@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 10,
                     ),
                     TextFormField(
-                      controller: passwordController..text = 'cityslicka',
+                      controller: passwordController,
                       focusNode: passwordFocus,
                       autofocus: false,
                       keyboardType: TextInputType.visiblePassword,
@@ -97,14 +97,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 passwordController.text == 'cityslicka') {
                               var url = '/api/login';
                               var body = {
-                                "email": 'eve.holt@reqres.in',
-                                "password":'cityslicka',
+                                "email": emailController.text,
+                                "password":passwordController.text,
                               };
                               setState(() {
                                 ApiCall.request(context, body, url)
                                     .then((value) {
                                         Navigator.pushNamed(context, Routes.signUp);
-                                        print(Routes.signUp);
+                                        // print(Routes.signUp);
                                 });
                               });
                             } else {

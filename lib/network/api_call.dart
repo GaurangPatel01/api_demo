@@ -32,6 +32,7 @@ class ApiCall {
     try{
       var url = Apis.baseUrl+endpoint;
       var response = await http.get(Uri.parse(url));
+      print('responses: ${response.runtimeType}');
       if(response.statusCode == 200){
         var result = jsonDecode(response.body);
         return result;
